@@ -29,6 +29,7 @@ services:
       - csgofloat
     volumes:
       - ./config:/config
+      - ./docker_start.sh:/usr/src/csgofloat/docker_start.sh
     environment:
       - TZ=Asia/Shanghai
     depends_on:
