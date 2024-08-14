@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:15.2
+    expose:
+      - 5432
+    networks:
+      - csgofloat
+    volumes:
+      - ./postgresql-data:/var/lib/postgresql/data
+    environment:
+      - TZ=Asia/Shanghai
+      - POSTGRES_DB=csgofloat
+      - POSTGRES_USER=USERNAME
+      - POSTGRES_PASSWORD=PASSWORD
+    restart: always
+    container_name: "csgofloat-postgres"
+
+  app:
+    image: step7750/csgofloat:master
+    expose:
+      - "80"
+      - "443"
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - csgofloat
+    volumes:
+      - ./config:/config
+    environment:
+      - TZ=Asia/Shanghai
+    depends_on:
+      - postgres
+    restart: always
+    container_name: "csgofloat"
+
+networks:
+  csgofloat:
+    driver: bridge
